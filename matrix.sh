@@ -1,33 +1,38 @@
 #/bin/tcsh -f
 clear
 
-set maxHeight = 5
-set text = ( a b c d e f r g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 1 2 3 4 5 6 7 8 9 0)
+set text = ( a b c d e f r g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z)
 
 #Randoms
 set rands = ( 100 3231 532 85 33563 647745 747477 779 76 40)
 set r = 0
 set random
 
-alias rand 'set rands = (`shuf -i 1-52`) && @ r = $r % $#rands + 1 && @ random = $rands[$r] '
+alias rand 'set rands = (`shuf -i 1-42`) && @ r = $r % $#rands + 1 && @ random = $rands[$r] '
 
 
 #Goto x,y
 set cX = 14
 set cY = 16
-alias gotoSpotRegular 'echo "\e[0m\e[32m\e[${cY};${cX}H$text2"'
-alias gotoSpotBold 'echo "\e[1m\e[32m\e[${cY};${cX}H$text2"'
+alias gotoSpotRegular 'echo "`tput sgr0``tput setab 0``tput setaf 2``tput cup $cY $cX`$text2"'
+alias gotoSpotBold 'echo "`tput setaf 2``tput setab 0``tput bold``tput cup $cY $cX`$text2"'
 
 
 
 set width = `tput cols`
 @ width = $width 
 set height = `tput lines` 
-@ height = $height - 1
+@ height = $height - 2
 @ streams = $width
+@ maxHeight = $height * 100 / 250
 @ virtHeight = $height + $maxHeight
-
 @ width2 = 2 * $width
+
+# Clear background to black
+foreach y(`seq 1 $height`)
+		echo "`tput setab 0` "
+end
+
 
 set streamsX = (`seq 1 1 $width2`)
 set streamsY = (`seq 1 1 $width2`) #dummy values
